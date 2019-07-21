@@ -6,31 +6,32 @@
 
 using namespace std;
 
-Node::Node(){  //default constr
-    numChildren=6;
-    children=new Node*[numChildren];
-    parent=NULL;
-    data=Board<string>();
-} 
-
-Node::Node(Node& source){ //copy constr
-    numChildren=source.numChildren;
-    parent=source.parent;
-    children=source.children;
-    data=source.data;
-} 
-
-Node::Node(size_t inNumChildren, Node* inP){ //custom constr
-    numChildren=inNumChildren;
-    parent=inP;
-    children=new Node*[inNumChildren];
-} 
-
-
-void Node::addChild(Node* inC){
-    children[numChildren]=inC;
-    numChildren++;
+Tree::Tree(){
+}
+Tree::Tree(int a){
+    numChildren=a;
+    for (int i = 0; i < a; i ++)
+    {children[i] = new Tree();}
+}
+Tree::Tree(Tree* input){
+    parent = input -> get_parent();
+    for(int i = 0; i < 6; i++){
+        children[i] = input -> get_child(i);
+    }
+    board = input -> getdata();
 }
 
+/*
+void Tree::init(){
+    for (int i = 0; i < 6; i ++)
+    {children[i] = new Tree();}
+}
+*/
+
+void set_parent_to_children(Tree* inP){
+    for (int i =0;i<inP->get_numChildren();i++){
+        inP->get_child(i)->set_parent(inP);
+    }
+}
 
 #endif

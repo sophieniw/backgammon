@@ -3,44 +3,81 @@
 using namespace std;
 
 int main(){
-    //below is the root of the tree: the beginning state of board == default board constr
-    Board<string> root_board;
-    //root_board.print();
-    const int index=7;
+        size_t numBranches_1=18; // 18 branches from root (6*3)
+    Tree* root=new Tree(numBranches_1);
+    //cout << root->get_numChildren() <<endl;
+    root->set_parent(NULL);
 
-    Board<string> col11_row5[index]; 
-    //even tho there're only 6 die numbers, I'd like to create 7 instances so that
-    //the step moved matches with the die number(see below)
+    /*
+    below is the first level from root
+    the first level has 18 branches, which includes
+    dice possibility 1-6 for each checker 1 that is stacked on the surface;
+    the column of checker 1 that is in the home board already (col18)
+    is ignored, in order to simply the tree and since it's already in the homeboard
+    */
 
-    for (int i = 1; i <7;i++){
-        col11_row5[i].move_checker_step(5,11,i);
+    Tree* curr1; //the first 6 branches are for checker on col0 row2, dice 1-6
+    for (int i = 0; i<6;i++){
+        curr1=root->get_child(i); 
+        curr1->move_checker_step(2,0,i+1);
+        root->set_child(curr1,i);
     }
-    //in this way, col11_checker1[1] moved 1 step, ...[2] moved 2 steps, etc.
-    //now, col11_checker1[1]-col11_checker1[6] are 6 board states for col 11 checker 1
+    set_parent_to_children(root);
 
-    // you can print out the arr element to see if the boards are created correctly
-    //col11_row5[2].print();
-    //col11_row5[3].print();
-
-    //=================================
-    //create board states for col16_row3
-    Board<string> col16_row3[index];
-    for (int i = 0;i<7;i++){
-        col16_row3[i].move_checker_step(3,16,i);
+    Tree* curr2; //the 2nd 6 branches are for checker on col11 row5, dice 1-6
+    for (int i = 6; i<12;i++){
+        curr2=root->get_child(i); 
+        curr2->move_checker_step(5,11,i-6+1);
+        root->set_child(curr2,i);
     }
-    //to test:
-    //col16_row3[1].print();
+
+    Tree* curr3; //the 3rd 6 branches are for checker on col16 row3, dice 1-6
+    for (int i = 12; i<18;i++){
+        curr3=root->get_child(i); 
+        curr3->move_checker_step(3,16,i-12+1);
+        root->set_child(curr3,i);
+    }
+
+
+    //there should be a more generic way to do the branches
+    //but now I will start by what is above and work my way through the 2nd level
+    //eventually, I will try to come up with a generic function to do each level
+
+    /*
+    below is the 2nd level from root
+    the first level has 24 branches. the 2nd level has 426 branches. 
+    */
+    size_t numBranches_2=426;
     
-    //****** the print out of the board states are all correct, 
-    //but when it's implemented into the node, it doesn't work.
+    
+    
+    
+    /*
+    //TO TEST IF ROOT->CHILDREN ARE CORRECT
+    Tree* child0=root->get_child(0);
+    Tree* child2=root->get_child(2);
+    Tree* child5=root->get_child(4);
 
-    Node* root;
-    //cout << root->getNumChildren();
-    //the number of children returned is not correct. It returned a large number 2337559003.
-    //so I think the bug is in the tree.h/ tree.cpp node class
+    cout << "\nchild 0 of root: moving with dice 1 on checker 1\n===================================\n";
+    child0->print_data();
+    cout << "\nchild 2 of root: moving with dice 3 on checker 1\n===================================\n";
+    child2->print_data();
+    cout << "\nchild 4 of root: moving with dice 5 on checker 1\n===================================\n";
+    child5->print_data();
 
-    //root->printData();
-    // it returned empty space
+    //TO TEST IF CHILDREN->PARENT IS CORRECT
+    cout << "\nparent node of children node:\n\n";
+    Tree* p0 = child0->get_parent();
+    Tree* p2= child2->get_parent();
 
+    p0->print_data();
+    cout <<"\n1===========================================\n";
+    p2->print_data();
+
+    //root->print_data();
+    //cout<<"================================\n";
+    //Tree* child0=root->get_child(0);
+    //child0->print_data();
+    */
     return 0;
 }

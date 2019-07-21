@@ -5,35 +5,38 @@
 
 using namespace std;
 
-class Node{
-    private:
-        size_t numChildren;
-        //size_t capChildren;
-        Node* parent;
-        Node** children;
-        Board<string> data;
+class Tree {
+public:
+	Tree();
+	Tree(int a);
+	Tree(Tree* input);
 
-    public:
-        Node(); //in cpp file
-        Node(Node& source); //in cpp file
-        Node(size_t inNumChildren=0, Node* inP=NULL); //in cpp file
+	Board<string> getdata() { return board; }
+	void print_data() { board.print(); }
 
-        void setParent(Node* inP){parent=inP;}
-        Node* getParent(){return parent;}
+	void move_checker_step(int originRow, int originCol, int steps) {
+		board.move_checker_step(originRow, originCol, steps);
+	}
+	void bear_off(int row, int col, int step);
+	void isWin();
 
-        void setChild(Node* inC, size_t arr_pos){children[arr_pos]=inC;}
-        Node* getChild(size_t pos){return children[pos];}
-        Node** getChildren(){return children;}
-        void addChild(Node* inC); //in cpp file
-        void addChildren(Node** inChildren){children=inChildren;}
+	void set_child(Tree* input, int pos) { children[pos] = input; }
+	void set_parent(Tree* input) { parent = input; }
+	Tree* get_child(int pos) { return children[pos]; }
+	Tree* get_parent() { return parent; }
+	Tree** get_children() { return children; }
+	size_t get_numChildren() { return numChildren; }
+	//void init();
 
-        size_t getNumChildren(){return numChildren;}
-        void setNumChildren(size_t num){numChildren=num;}
-
-        void setData(Board<string> entry){data=entry;}
-        Board<string> getData(){return data;}
-        void printData(){data.print();}
+private:
+	size_t numChildren = 6;
+	Tree* parent;
+	Tree** children = new Tree*[numChildren];
+	Board <string> board;
 };
 
+void set_parent_to_children(Tree* inP);//set the tree object itself to all the children
+
+
 #include "tree.cpp"
-#endif
+#endif 
