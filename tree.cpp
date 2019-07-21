@@ -1,7 +1,7 @@
 #ifndef __TREE_CPP__
 #define __TREE_CPP__
 
-#include "board.h"
+#include "board.h"  
 #include "tree.h"
 
 using namespace std;
