@@ -72,6 +72,7 @@ void Board<Item>::move_checker(int row, int col, int to_row, int to_col){
 
 template <class Item>
 void Board<Item>::move_checker_step(int originRow, int originCol, int steps){
+
     if (board[originCol][originRow]=="1" && board[originCol+steps][1]!="2"){
         size_t i =1;
         while(board[originCol+steps][i]!=" "){
@@ -81,17 +82,19 @@ void Board<Item>::move_checker_step(int originRow, int originCol, int steps){
         board[originCol+steps][i]="1"; 
     }
     //if there's invalid move, the board will stay the same
+
 }
 
 template <class Item>
-void Board<Item>::bear_off(int row, int col){
-   if (board[col][row]=="1"&&checker_removed!=15){
-       board[col][row]=" ";
+void Board<Item>::bear_off(int dice_num){
+    if(board[24-dice_num][1]=="1"){
+        int row=1;
+        while (board[24-dice_num][row+1]=="1"){
+            row++;
+        }
+        board[24-dice_num][row]=" ";
        checker_removed+=1;
-   }
-   else{
-       cout << "Not a valid move. Please try again.";
-   }
+    }
 }
 
 template <class Item>
@@ -100,5 +103,54 @@ void Board<Item>::isWin(){
        cout << "You won the game!\n";
    }
 }
+
+template <class Item>
+size_t Board<Item>::pieces_to_move(){
+    size_t count=0;
+    for(int i =0;i<18;i++){
+        if (board[i][1]=="1"){
+            count++;
+        }
+    }
+    return count;
+}
+
+template <class Item>
+void Board<Item>::set_surface_checker_pos(vector<int>& surface_checkers_cols, vector<int>& surface_checkers_rows){
+    for(int i =0;i<17;i++){
+        int col=0;
+        int row=1;
+        if (board[i][1]=="1"){
+            while (board[i][row+1]=="1"){
+                row++;
+            }
+            surface_checkers_cols.push_back(i);
+            surface_checkers_rows.push_back(row);
+        }
+    }
+}
+
+template <class Item>
+int Board<Item>::re_col(){
+    for (int i = 0; i < 24; i++){
+        for (int j = 5; j > 0; j--){
+            if (board[i][j] == "1"){
+                return i;
+            }
+        }
+    }
+}
+
+template<class Item>
+int Board<Item>::re_row(){
+    for (int i = 0; i < 24; i++){
+        for (int j = 5; j > 0; j--){
+            if (board[i][j] == "1"){
+                return j;
+            }
+        }
+    }
+}
+
 
 #endif
