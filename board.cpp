@@ -6,6 +6,10 @@ using namespace std;
 
 template <class Item>
 Board<Item>::Board(){
+
+    checker_removed=0;
+    board_moved=false;
+
    for (int i = 0; i < 24; i ++){
        int count = i;
        if (count > 11){
@@ -58,31 +62,24 @@ void Board<Item>::print(){
    }
 }
 
-template <class Item>
-void Board<Item>::move_checker(int row, int col, int to_row, int to_col){
-   if (board[col][row]=="1" && board[to_col][to_row]!="2"){
-       board[col][row]=" ";
-       board[to_col][to_row]="1";
-   }
-   else{
-       cout << "Not a valid move. Please try again.";
-   }
-  
-}
+
 
 template <class Item>
 void Board<Item>::move_checker_step(int originRow, int originCol, int steps){
-
-    if (board[originCol][originRow]=="1" && board[originCol+steps][1]!="2"){
+    board_moved=false;
+    moved_steps=0;
+    if (board[originCol][originRow]=="1" && board[originCol+steps][1]!="2" && board[originCol+steps][5]!="1"){
         size_t i =1;
         while(board[originCol+steps][i]!=" "){
             i++; //find the row that can be stacked
         }
         board[originCol][originRow]=" ";
         board[originCol+steps][i]="1"; 
+
+        board_moved=true;
+        moved_steps=steps;
     }
     //if there's invalid move, the board will stay the same
-
 }
 
 template <class Item>
@@ -94,7 +91,10 @@ void Board<Item>::bear_off(int dice_num){
         }
         board[24-dice_num][row]=" ";
        checker_removed+=1;
+       board_moved=true;
+
     }
+
 }
 
 template <class Item>
@@ -117,6 +117,8 @@ size_t Board<Item>::pieces_to_move(){
 
 template <class Item>
 void Board<Item>::set_surface_checker_pos(vector<int>& surface_checkers_cols, vector<int>& surface_checkers_rows){
+    surface_checkers_cols.clear();
+    surface_checkers_rows.clear();
     for(int i =0;i<17;i++){
         int col=0;
         int row=1;
@@ -151,6 +153,7 @@ int Board<Item>::re_row(){
         }
     }
 }
+
 
 
 #endif

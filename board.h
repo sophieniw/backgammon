@@ -20,13 +20,14 @@ class Board{
 
 
    Board();  // for initial layout for checker
-   void print();
-   void move_checker(int row, int col, int to_row, int to_col);
+   void print(); //to print out the entire board state
    void move_checker_step(int originRow, int originCol, int steps);
    void bear_off(int dice_num);
    void isWin();
    size_t get_checker_removed_num(){return checker_removed;}
    void set_checker_removed_num(int num){checker_removed=num;}
+   bool get_board_moved(){return board_moved;}
+   int get_moved_steps(){return moved_steps;}
    int re_col();
    int re_row();
    size_t pieces_to_move();
@@ -34,9 +35,13 @@ class Board{
 
 private:
    Item board[point_size][max_column];
-   size_t checker_removed=0; //when this is 15, that means all checkers have been "bear off"
+   size_t checker_removed; 
+   bool board_moved;
+   int moved_steps;
+   //when this is 15, that means all checkers have been "bear off"
 
 };
+
 
 #include "board.cpp"
 #endif

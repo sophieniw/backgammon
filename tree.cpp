@@ -7,6 +7,7 @@
 using namespace std;
 
 Tree::Tree(){
+
 }
 
 
@@ -18,35 +19,24 @@ Tree::Tree(int a){
     }
 }
 
-Tree::Tree(Tree* input){
-    parent = input -> get_parent();
-    for(int i = 0; i < 6; i++){
-        children[i] = input -> get_child(i);
-    }
-    board = input -> getdata();
-}
+
+
 
 void Tree::init(int numBranches){
+    delete []children;
     numChildren=numBranches;
+    children=new Tree*[numChildren];
     for (int i = 0; i < numChildren; i ++){
         children[i] = new Tree();
         children[i]->set_parent(this);
         children[i]->set_board(board);
-
-        int checker_removed_num=this->getdata().get_checker_removed_num();
-        children[i]->getdata().set_checker_removed_num(checker_removed_num);
     } 
     
 }
 
+
 void Tree::remove_children(){
     delete[] children;
-}
-
-void set_parent_to_children(Tree* inP){
-    for (int i =0;i < inP -> get_numChildren();i++){
-        inP->get_child(i) -> set_parent(inP);
-    }
 }
 
 
@@ -57,12 +47,14 @@ void set_children_boards(Tree* parent){
     vector<int>surface_checker_rows=parent->getdata().surface_checker_rows;  //to store the row index of surface checkers
     //to get the number of branches for this parent
     size_t numCheckers=parent->pieces_to_move();  //to get how many pieces can be moved according to the board in the parent node
+    size_t numBranches=numCheckers * 6; 
+    parent->init(numBranches); 
+    //init(int x) function creates x number of child nodes under parent; 
+    //in the child nodes, before editing, the board is the same as the parent
 
     if(parent->pieces_to_move()!=0){ //if there are pieces that you can move
         size_t numBranches=numCheckers * 6; 
         parent->init(numBranches); 
-        //init(int x) function creates x number of child nodes under parent; 
-        //in the child nodes, before editing, the board is the same as the parent
 
         Tree* curr; 
         for (int j = 0;j<numCheckers;j++){ // move every surface checker
@@ -74,6 +66,7 @@ void set_children_boards(Tree* parent){
         } 
         //set_parent_to_children(parent);
     }
+    
     //something's wrong with this statement
     else if (parent->getdata().get_checker_removed_num()<15){ //if there are no movable pieces, starts bearing off the pieces on the home board
         parent->init(6);
@@ -81,27 +74,97 @@ void set_children_boards(Tree* parent){
         for(int i =0;i<6;i++){
             curr=parent->get_child(i);
             curr->bear_off(i);
+            parent->set_child(curr,i);
         }
     }
 
     else if (parent->getdata().get_checker_removed_num()==15){//if all checkers are born off, remove the child nodes created under default 
         parent->remove_children();
     }
-
-
+    
 }
 
 
-void set_tree(Tree* parent){
-    if (parent->getdata().get_checker_removed_num()==15){
-            cout << "you win the game!"<<endl;
-            return;
+bool isInBearOff(Tree* t){ //see if the board in the tree node is in the bear off stage
+    Board<string> board=t->getdata();
+    if (board.get_checker_removed_num()<15 && board.pieces_to_move()==0){
+        return true;
     }
-    for(int i=0;i<parent->get_numChildren();i++){
-        Tree* p = parent->get_child(i); //access each child as p under parent 
-        set_children_boards(p);//set children boards for p, so p has an array of children nodes now
-        set_tree(p); //for each p,do the same thing: access each child, set boards for each child, and repeat for each child
+    else if (board.get_checker_removed_num()==15){
+        return false;
+    }
+    else{
+        return false;
+    }
+}
+
+//for MiniMax Searching Algo
+int evaluate(Tree* t){ //evaluate function to return scores for different board state
+
+    Board<string> board=t->getdata();
+
+    if (!board.get_board_moved()){ //if child board is the same as parent board
+        return 0;
+    }
+    else if (isInBearOff(t)){ //if in bear off stage
+        return 1;
+    }
+    else { //if not in bear off stage, score = steps moved
+        return (t->getdata().get_moved_steps());
+    }
+}
+
+void minimax(Tree* t, bool isMaximizing, int count){
+    set_children_boards(t);
+
+    Tree* bestMove;
+    Tree* c;    
+    int value=0;
+
+    if (t->getdata().get_checker_removed_num()==15){ //when all checkers are removed from the bear off stage
+        cout << "You've won the game!\n";
+        cout << "Minimax Search has traversed "<<count <<" tree nodes.\n";
     }
 
+    if(isMaximizing){
+        int bestVal=-10000;
+        for(int i =0;i < t->get_numChildren();i++){
+            c=t->get_child(i);
+            value=evaluate(c);
+            count++;
+            if(value>=bestVal){
+                bestVal=value;
+                bestMove=c;
+            }
+            
+        }
+        t=c;
+        t->print();
+        cout << "\nTree nodes traversed: "<<count<<endl;
+        cout << "========================================\n";
+        //cout << value << endl;
+        //cout << t->pieces_to_move()<<endl;
+        minimax(t,true,count);
+    }
+
+    else{
+        int bestVal=10000;
+        for(int i =0;i < t->get_numChildren();i++){
+            c=t->get_child(i);
+            value=evaluate(c);
+            if(value<bestVal){
+                bestVal=value;
+                bestMove=c;
+            }
+            count++;
+        }
+        t=c;
+        t->print();
+        cout <<endl;
+        minimax(t,true,count);
+    }
 }
+
+
+
 #endif

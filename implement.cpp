@@ -4,9 +4,11 @@ using namespace std;
 
 
 int main(){
-    Tree* root=new Tree();
-    set_children_boards(root);
-    set_tree(root);
+
+    Tree* root = new Tree();
+    minimax(root,true,0);
+
+    
 
     return 0;
 }
