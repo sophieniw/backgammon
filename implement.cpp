@@ -2,6 +2,8 @@
 #include "tree.h"
 using namespace std;
 
+//7-24-2019
+
 /*
 void set_tree(Tree* t, int max_depth,int curr_depth){
     set_children_boards(t);
