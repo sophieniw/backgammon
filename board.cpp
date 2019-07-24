@@ -4,6 +4,8 @@
 #include "board.h"
 using namespace std;
 
+//7-24-2019
+
 template <class Item>
 Board<Item>::Board(){ 
     //default constructor to layout the origin board state
