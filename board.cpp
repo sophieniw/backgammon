@@ -5,7 +5,21 @@
 using namespace std;
 
 template <class Item>
-Board<Item>::Board(){
+Board<Item>::Board(){ 
+    //default constructor to layout the origin board state
+    // B W B W B W B W B W B W
+    // 2       1   1         2
+    // 2       1   1         2
+    // 2       1   1
+    // 2           1
+    // 2           1
+    //
+    // 1           2
+    // 1           2
+    // 1       2   2
+    // 1       2   2         1
+    // 1       2   2         1
+    // B W B W B W B W B W B W
 
     checker_removed=0;
     board_moved=false;
@@ -43,7 +57,7 @@ Board<Item>::Board(){
 }
 
 template <class Item>
-void Board<Item>::print(){
+void Board<Item>::print(){ // to print out the board
    for (int i = 0; i < 6; i ++){
 
        for (int j = 12; j < 24; j ++){
@@ -66,6 +80,8 @@ void Board<Item>::print(){
 
 template <class Item>
 void Board<Item>::move_checker_step(int originRow, int originCol, int steps){
+    //PRE CONDITION: index position of one checker: originRow, originCol, and steps for the checker to move towards home board
+    //POST CONDITION: the board is changed based on the checker moved; move_steps and board_moved would be updated too 
     board_moved=false;
     moved_steps=0;
     if (board[originCol][originRow]=="1" && board[originCol+steps][1]!="2" && board[originCol+steps][5]!="1"){
@@ -84,6 +100,9 @@ void Board<Item>::move_checker_step(int originRow, int originCol, int steps){
 
 template <class Item>
 void Board<Item>::bear_off(int dice_num){
+    //PRE CONDITION: an integer from 1-6
+    //POST CONDITION: a checker on the column of (24-dice_num) would be removed
+    board_moved=false;
     if(board[24-dice_num][1]=="1"){
         int row=1;
         while (board[24-dice_num][row+1]=="1"){
@@ -99,6 +118,7 @@ void Board<Item>::bear_off(int dice_num){
 
 template <class Item>
 void Board<Item>::isWin(){
+    //check if all checkers are borne off
    if (checker_removed==15){
        cout << "You won the game!\n";
    }
@@ -106,6 +126,7 @@ void Board<Item>::isWin(){
 
 template <class Item>
 size_t Board<Item>::pieces_to_move(){
+    //
     size_t count=0;
     for(int i =0;i<18;i++){
         if (board[i][1]=="1"){
@@ -117,9 +138,11 @@ size_t Board<Item>::pieces_to_move(){
 
 template <class Item>
 void Board<Item>::set_surface_checker_pos(vector<int>& surface_checkers_cols, vector<int>& surface_checkers_rows){
+    //PRE CONDITION:  2 vectors that store rows and cols for surface checkers for the previous board state
+    //POST CONDITION: the 2 vectors are updated according to the updeated board state
     surface_checkers_cols.clear();
     surface_checkers_rows.clear();
-    for(int i =0;i<17;i++){
+    for(int i =0;i<18;i++){
         int col=0;
         int row=1;
         if (board[i][1]=="1"){
@@ -134,6 +157,7 @@ void Board<Item>::set_surface_checker_pos(vector<int>& surface_checkers_cols, ve
 
 template <class Item>
 int Board<Item>::re_col(){
+    //return the next col that has a movable checker
     for (int i = 0; i < 24; i++){
         for (int j = 5; j > 0; j--){
             if (board[i][j] == "1"){
@@ -145,6 +169,7 @@ int Board<Item>::re_col(){
 
 template<class Item>
 int Board<Item>::re_row(){
+    //return the next row that has a movable checker
     for (int i = 0; i < 24; i++){
         for (int j = 5; j > 0; j--){
             if (board[i][j] == "1"){
