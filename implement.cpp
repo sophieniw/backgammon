@@ -5,19 +5,6 @@ using namespace std;
 //7-24-2019
 
 /*
-void set_tree(Tree* t, int max_depth,int curr_depth){
-    set_children_boards(t);
-    while(curr_depth<=max_depth){
-        for(int i = 0;i<t->get_numChildren();i++){
-            set_children_boards(t->get_child(i));
-        }
-        curr_depth++;
-    }
-
-}
-*/
-
-/*
 void test_printout(Tree* t, int num){
     Tree* child=t->get_child(num);
     child->print();
@@ -43,26 +30,28 @@ int main(){
         cout <<"============================" <<endl;
         cout <<"1. DFS\n";
         cout <<"2. BFS\n";
-        cout <<"3. Minimax Search\n";
-        cout <<"4. IDDFS\n";
-        cout <<"5. Alpha-beta Pruning\n";
+        cout <<"3. Minimax Search\n";      //alpha-beta and minimax are very similar, they will return the same steps
+        cout <<"4. Alpha-beta Pruning\n";  //however, alpha-beta searched less nodes to achieve the result
+        cout <<"5. IDDFS\n";
         cout <<"6. Exit\n";
         cout <<endl<<"Please select: ";
         cin >> user_input;
         cout <<endl;
 
         if(user_input=="1"){
+
+        }
+        else if (user_input=="2"){
+            Tree* root=new Tree;
+            BFS(root);
+        }
+        else if (user_input=="3"){
             Tree* root=new Tree;
             minimax(root,true,0);
         }
-        else if (user_input=="2"){
-
-        }
-        else if (user_input=="3"){
-
-        }
         else if (user_input=="4"){
-
+            Tree* root=new Tree;
+            alphabeta(root,true,0,-1000,1000);
         }
         else if (user_input=="5"){
 

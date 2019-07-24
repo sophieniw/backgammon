@@ -31,6 +31,8 @@ public:
     size_t get_numChildren() { return numChildren; }
 
     void print() { board.print(); }
+    bool isVisited(){return visited;}
+    void setVisited(bool v){visited=v;}
 
     //functions below are meant to triggers functions inside board class
     //more detailed descriptions are in the board class, under same function names
@@ -48,15 +50,19 @@ private:
     Tree* parent;
     Tree** children = new Tree*[numChildren];
     Board <string> board;
+    bool visited;
 };
 
+//BFS
+void BFS(Tree* t);
 
 //below is for minimax search algo
 bool isInBearOff(Tree* t); //to set a state that terminate the minimax search
 int evaluate(Tree* child); //evaluate each child and return a score for minimax search
 void minimax(Tree* t, bool isMaximizing, int count); //minimax will print out board states selected based on evaluation scores
 
-
+//below is for alpha-beta pruning
+void alphabeta(Tree* t,int depth,int alpha,int beta,bool isMaximizing);
 
 #include "tree.cpp"
 

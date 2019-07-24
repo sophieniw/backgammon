@@ -3,6 +3,7 @@
 
 #include "board.h"  
 #include "tree.h"
+#include <queue>
 
 using namespace std;
 //7-24-2019
@@ -98,6 +99,38 @@ void set_children_boards(Tree* parent){
 }
 
 
+//BFS
+void BFS(Tree* t){ //take in a tree node t to proceed Breadth First Search
+    queue<Tree> Q;
+    vector<Tree> visited;
+
+    set_children_boards(t);
+    visited.push_back(*t);
+    t->setVisited(true);
+    Q.push(*t);
+
+    while(!Q.empty()){
+            Tree front_tree=Q.front();
+            front_tree.print();
+            Q.pop();
+
+        for(int i =0;i<front_tree.get_numChildren();i++){
+            Tree* child=front_tree.get_child(i);
+            set_children_boards(child);
+            for(int j = 0; j < visited.size();j++){
+                if(child->isVisited()==false){
+                    visited.push_back(*child);
+                    child->setVisited(true);
+                    Q.push(*child);
+                }
+            }
+
+        }
+    }
+}
+
+
+
 //Functions for MiniMax Searching Algo:
 // isInBearOff(..), evaluate(..),minimax(..)
 
@@ -137,6 +170,8 @@ int evaluate(Tree* t){
     }
 }
 
+//minimax searching algo
+//went through 366 nodes
 void minimax(Tree* t, bool isMaximizing, int count){
     //PRE CONDITION: a pointer to a tree object t, bool value means if we're finding the max score
     //               among children nodes, integer count to increment nodes traversed
@@ -170,7 +205,8 @@ void minimax(Tree* t, bool isMaximizing, int count){
         cout << "\nTree nodes traversed: "<<count<<endl;
         cout << "========================================\n";
 
-        minimax(t,isMaximizing,count);
+        minimax(t,isMaximizing,count); //in two players version, it would be minimax(t,!isMaximizng,count)
+                                       //but since it's only one player, it would search for the highest possible score move everytime
     }
 
     else{
@@ -191,6 +227,79 @@ void minimax(Tree* t, bool isMaximizing, int count){
     }
 }
 
+
+
+//alpha-beta pruning searching algo
+//very similar to minimax search and will have same steps moved as the minimax search
+//however, went through less nodes (355)
+void alphabeta(Tree* t, bool isMaximizing, int count, int alpha, int beta){
+    //PRE CONDITION: a pointer to a tree object t, bool value means if we're finding the max score
+    //               among children nodes, integer count to increment nodes traversed
+    //POST CONDITION: the minimax function will print out the board states selected based on
+    //                the max scores
+
+    set_children_boards(t);
+    Tree* bestMove;
+    Tree* c;    
+    int value=0;
+
+    if (t->getdata().get_checker_removed_num()==15){ //when all checkers are removed from the bear off stage
+        cout << "You've won the game!\n";
+        cout << "Minimax Search has traversed "<<count <<" tree nodes.\n";
+    }   
+
+    if(isMaximizing){
+        int bestVal=-10000;
+        for(int i =0;i < t->get_numChildren();i++){
+            c=t->get_child(i);
+            value=evaluate(c);
+            if(value>=bestVal){
+                bestVal=value;
+                bestMove=c;
+                
+            }
+            if(value>alpha){
+                alpha=value;
+                count++;
+            }
+            if(beta<alpha){
+                break;
+            }
+            
+        }
+        t=bestMove;
+        t->print();
+        cout << "\nTree nodes traversed: "<<count<<endl;
+        cout << "========================================\n";
+
+        minimax(t,isMaximizing,count); //in two players version, it would be minimax(t,!isMaximizng,count)
+                                       //but since it's only one player, it would search for the highest possible score move everytime
+    }
+
+    else{
+        int bestVal=10000;
+        for(int i =0;i < t->get_numChildren();i++){
+            c=t->get_child(i);
+            value=evaluate(c);
+            if(value<bestVal){
+                bestVal=value;
+                bestMove=c;
+            }
+            if(value<beta){
+                beta=value;
+                count++;
+            }
+            if (beta>alpha){
+                break;
+            }
+            
+        }
+        t=c;
+        t->print();
+        cout <<endl;
+        minimax(t,isMaximizing,count);
+    }
+}
 
 
 #endif
