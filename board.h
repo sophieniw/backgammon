@@ -31,7 +31,7 @@ class Board{
   
    void move_checker_step(int originRow, int originCol, int steps); //to move checker on originRow and col with steps towards homeboard
    void bear_off(int dice_num); // to bear off checkers in the homeboards 
-   void isWin(); 
+   bool isWin(); 
 
    int re_col(); //return the next col that has a movable checker
    int re_row(); //return the next row that has a movable checker

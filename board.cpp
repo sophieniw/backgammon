@@ -119,11 +119,13 @@ void Board<Item>::bear_off(int dice_num){
 }
 
 template <class Item>
-void Board<Item>::isWin(){
+bool Board<Item>::isWin(){
     //check if all checkers are borne off
    if (checker_removed==15){
        cout << "You won the game!\n";
+       return true;
    }
+   return false;
 }
 
 template <class Item>

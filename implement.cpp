@@ -30,8 +30,46 @@ void test_printout(Tree* t, int num){
 */
 
 int main(){
-    Tree* root=new Tree;
-    minimax(root,true,0);
+    //construct a main menu
+    string user_input;
+
+    while(true){
+        if(user_input=="6"){
+            break;
+        }
+        cout <<endl;
+        cout <<"============================"<<endl;        
+        cout <<"        Backgammon"<<endl;
+        cout <<"============================" <<endl;
+        cout <<"1. DFS\n";
+        cout <<"2. BFS\n";
+        cout <<"3. Minimax Search\n";
+        cout <<"4. IDDFS\n";
+        cout <<"5. Alpha-beta Pruning\n";
+        cout <<"6. Exit\n";
+        cout <<endl<<"Please select: ";
+        cin >> user_input;
+        cout <<endl;
+
+        if(user_input=="1"){
+            Tree* root=new Tree;
+            minimax(root,true,0);
+        }
+        else if (user_input=="2"){
+
+        }
+        else if (user_input=="3"){
+
+        }
+        else if (user_input=="4"){
+
+        }
+        else if (user_input=="5"){
+
+        }
+
+    }
+
 
     return 0;
 }
