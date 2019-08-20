@@ -26,6 +26,17 @@ When the specific search algo is chosen, the program will then run the algo and 
 game itself.
 
 ## Examples
+Entering the main menu after running ther implement.cpp:
+
+![Image of main menu](https://github.com/sophieniw/backgammon-search-trees/blob/master/misc/menu.png)
+
+Select a search, and the search begin:
+
+![Image of search begin](https://github.com/sophieniw/backgammon-search-trees/blob/master/misc/search_begin.png)
+
+When the search ends:
+
+![Image of search end](https://github.com/sophieniw/backgammon-search-trees/blob/master/misc/search_end.png)
 
 ## Installation
 * Git clone this repository to your preferred directory 
