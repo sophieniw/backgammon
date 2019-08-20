@@ -16,8 +16,7 @@ int main(){
         cout <<"============================" <<endl;
         cout <<"1. BFS\n";  //run very long 
         cout <<"2. Minimax Search\n";      //alpha-beta and minimax are very similar, they will return the same steps
-        //cout <<"3. Alpha-beta Pruning\n";  - in progress
-        //4.DFS - in progress
+        //3.DFS - in progress
         cout <<"3. Exit\n";
         cout <<endl<<"Please select: ";
         cin >> user_input;

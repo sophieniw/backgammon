@@ -61,8 +61,6 @@ bool isInBearOff(Tree* t); //to set a state that terminate the minimax search
 int evaluate(Tree* child); //evaluate each child and return a score for minimax search
 void minimax(Tree* t, bool isMaximizing, int count); //minimax will print out board states selected based on evaluation scores
 
-//below is for alpha-beta pruning
-void alphabeta(Tree* t,int depth,int alpha,int beta,bool isMaximizing);
 
 #include "tree.cpp"
 
